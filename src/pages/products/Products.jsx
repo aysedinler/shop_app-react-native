@@ -5,15 +5,20 @@ import axios from 'axios';
 import { API_URL } from '@env'; // ⬅️ buradan alıyoruz
 import ProductCard from '../../components/ProductCard/ProductCard';
 import useFetch from '../../hooks/useFetch/useFetch';
+import Loading from '../../components/loading/Loading';
+import Error from '../../components/error/Error';
 
-export default function Products() {
+export default function Products({ navigation }) {
     const { loading, error, products } = useFetch(API_URL)
-    const renderProduct = ({ item }) => <ProductCard product={item} />;
+    const handleProductSelect = id => {
+        navigation.navigate("DetailPAge", { id })
+    }
+    const renderProduct = ({ item }) => <ProductCard product={item} onSelect={() => handleProductSelect(item.id)} />;
     if (loading) {
-        return <ActivityIndicator size="large" />
+        return <Loading />
     }
     if (error) {
-        return <Text>{error}</Text>
+        return <Error />
     }
 
 
